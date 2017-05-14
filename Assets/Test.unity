@@ -226,7 +226,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mat: {fileID: 2100000, guid: 8ef1e489daa414b028953032a5055ffc, type: 2}
   numberParticles: 20
-  sizeParticle: 0.5
+  sizeParticle: 0.01
+  seed: 0
+  numBodies: 512
+  positionScale: 16
+  velocityScale: 1
+  damping: 0.96
+  softeningSquared: 0.1
+  speed: 1
+  _simParticlesComputeShader: {fileID: 7200000, guid: 15bd5810b1fbc4916aadcd1994680277,
+    type: 3}
 --- !u!4 &233379216
 Transform:
   m_ObjectHideFlags: 0

@@ -1,4 +1,6 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
 Shader "DrawProceduralShader"
 {
@@ -15,8 +17,10 @@ Shader "DrawProceduralShader"
 
 			#include "UnityCG.cginc"
 
+			StructuredBuffer<float4> _quadCornersBuffer;
+			StructuredBuffer<float4> _positionsBuffer;
+
 			float _numberParticles;
-			float _sizeParticle;
 
 			struct v2f
 			{
@@ -26,20 +30,7 @@ Shader "DrawProceduralShader"
 			v2f vert (uint id : SV_VertexID)
 			{
 				v2f o;
-
-				uint k = id%6;
-				int idi = id/6;
-				float3 pos = float3(cos(2.0*3.14159*idi/_numberParticles+_Time.y),sin(2.0*3.14159*idi/_numberParticles+_Time.y),0.0);
-				pos*=10.0;
-				float3 f = float3(0.0,0.0,0.0);
-				float d = _sizeParticle;
-
-				//Depending on vertex index we go to one or other corner of the quad
-				f.x = lerp(d,-d,step(3.0,(k-2+6)%6));
-				f.y = lerp(d,-d,step(3.0,(k-1+6)%6));
-
-				o.vertex = mul(unity_ObjectToWorld,float4(f+pos,1.0));
-				o.vertex = mul(UNITY_MATRIX_VP,o.vertex);
+				o.vertex = UnityObjectToClipPos(_positionsBuffer[id/6]+_quadCornersBuffer[id%6]);
 				return o;
 			}
 			
